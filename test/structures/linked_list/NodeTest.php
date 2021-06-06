@@ -1,6 +1,6 @@
 <?php
 
-namespace linked_list;
+namespace Structures\linked_list;
 
 use PHPUnit\Framework\TestCase;
 

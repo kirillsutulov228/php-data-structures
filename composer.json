@@ -1,7 +1,8 @@
 {
     "autoload": {
-        "psr-0": {
-            "linked_list": "src"
+        "psr-4": {
+            "Structures\\linked_list\\": "src/structures/linked_list",
+            "Structures\\tree\\": "src/structures/tree"
         }
     },
     "require-dev": {

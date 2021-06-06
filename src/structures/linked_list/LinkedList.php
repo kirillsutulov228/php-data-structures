@@ -1,7 +1,7 @@
 <?php
 
 
-namespace linked_list;
+namespace Structures\linked_list;
 
 
 class LinkedList {
@@ -24,7 +24,6 @@ class LinkedList {
      */
     private int $size;
 
-
     /**
      * LinkedList constructor.
      * @param array|null $values array of the initial values (optional)
@@ -39,9 +38,9 @@ class LinkedList {
     }
 
     public function addFromArray(array $values) {
-            foreach ($values as $value) {
-                $this->add($value);
-            }
+        foreach ($values as $value) {
+            $this->add($value);
+        }
     }
 
     /**
@@ -218,9 +217,26 @@ class LinkedList {
     }
 
     /**
+     * @param mixed $value new value of the element
+     * @param int $index index of the element
+     * @return bool true if element with index exists and updated, false otherwise
+     */
+    public function set($value, int $index): bool {
+        if ($index >= $this->size || $index < 0) return false;
+        $updateNode = $this->head;
+        $currentPos = 0;
+        while ($currentPos != $index) {
+            $updateNode = $updateNode->getNext();
+            $currentPos++;
+        }
+        $updateNode->setValue($value);
+        return true;
+    }
+
+    /**
      * @return int current size of the list
      */
-    public function getSize(): int {
+    public function size(): int {
         return $this->size;
     }
 
