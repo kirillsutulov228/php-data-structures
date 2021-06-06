@@ -1,7 +1,7 @@
 <?php
 
 
-namespace linked_list;
+namespace Structures\linked_list;
 
 
 class Node {

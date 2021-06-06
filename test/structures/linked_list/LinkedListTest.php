@@ -1,6 +1,6 @@
 <?php
 
-namespace linked_list;
+namespace Structures\linked_list;
 
 use PHPUnit\Framework\TestCase;
 
@@ -13,7 +13,7 @@ class LinkedListTest extends TestCase {
 
         $this->assertTrue($list->add('first'));
         $this->assertSame( 'first', $list->get(0));
-        $this->assertSame(1, $list->getSize());
+        $this->assertSame(1, $list->size());
 
         $this->assertTrue($list->add('second'));
         $this->assertSame( 'second', $list->get(1));
@@ -79,23 +79,23 @@ class LinkedListTest extends TestCase {
         $this->assertTrue($list->removeByIndex(0));
         $this->assertSame([], $list->values());
 
-        $this->assertSame(0, $list->getSize());
+        $this->assertSame(0, $list->size());
 
         $list->addFromArray([1,2,3,4,5]);
 
-        $this->assertTrue($list->removeByIndex($list->getSize() - 1));
+        $this->assertTrue($list->removeByIndex($list->size() - 1));
         $this->assertSame([1,2,3,4], $list->values());
 
-        $this->assertTrue($list->removeByIndex($list->getSize() - 1));
+        $this->assertTrue($list->removeByIndex($list->size() - 1));
         $this->assertSame([1,2,3], $list->values());
 
-        $this->assertTrue($list->removeByIndex($list->getSize() - 1));
+        $this->assertTrue($list->removeByIndex($list->size() - 1));
         $this->assertSame([1,2], $list->values());
 
-        $this->assertTrue($list->removeByIndex($list->getSize() - 1));
+        $this->assertTrue($list->removeByIndex($list->size() - 1));
         $this->assertSame([1], $list->values());
 
-        $this->assertTrue($list->removeByIndex($list->getSize() - 1));
+        $this->assertTrue($list->removeByIndex($list->size() - 1));
         $this->assertSame([], $list->values());
 
         $list->addFromArray([5, 4, 3, 2, 1]);
@@ -115,7 +115,14 @@ class LinkedListTest extends TestCase {
 
         $this->assertTrue($list->removeByIndex(0));
         $this->assertSame([], $list->values());
+    }
 
+    public function testUpdate() {
+        $list = new LinkedList([1,2,3,4,5]);
+        foreach ($list->values() as $key => $value) {
+            $list->set($value * 2, $key);
+        }
+        $this->assertSame([2, 4, 6, 8, 10], $list->values());
     }
 
 }
