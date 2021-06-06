@@ -13,7 +13,7 @@ class NodeTest extends TestCase {
         $firstNode->setNext($secondNode);
         $secondNode->setPrev($firstNode);
 
-        $this->assertSame($firstNode->getNext(), $secondNode);
-        $this->assertSame($secondNode->getPrev(), $firstNode);
+        $this->assertSame($secondNode, $firstNode->getNext());
+        $this->assertSame($firstNode, $secondNode->getPrev());
     }
 }

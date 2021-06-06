@@ -31,6 +31,8 @@ class Node {
      */
     public function __construct($value) {
         $this->value = $value;
+        $this->next = null;
+        $this->prev = null;
     }
 
     /**
