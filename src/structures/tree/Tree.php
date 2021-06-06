@@ -4,8 +4,6 @@
 namespace Structures\tree;
 
 
-use phpDocumentor\Reflection\Types\Mixed_;
-
 class Tree {
 
     private ?Node $root;
@@ -13,7 +11,7 @@ class Tree {
 
     /**
      * Tree constructor.
-     * @param array $arr
+     * @param array $arr (optional) array that used for filling the tree. Keys must be an integers
      */
     public function __construct(array $arr) {
         $this->root = null;
@@ -24,32 +22,35 @@ class Tree {
     }
 
     /**
-     * @return int
+     * @return int current size of the tree
      */
     public function size(): int {
         return $this->size;
     }
 
     /**
-     * @param array $arr
-     * @param bool $updateMode
-     * @return bool
+     * @param array $arr array that used for filling the tree. Keys must be an integers
+     * @param bool $updateMode if true, existing elements will be updated
+     * @return bool true if elements added successfully, false otherwise
      */
     public function addFromArray(array $arr, bool $updateMode = false): bool {
         foreach ($arr as $key => $value) {
             if (!is_int($key)) {
                 return false;
             }
+        }
+        foreach ($arr as $key => $value) {
             $this->add($value, $key, $updateMode);
         }
         return true;
     }
 
     /**
-     * @param $value
-     * @param int $key
-     * @param bool $updateMode
-     * @return bool
+     * @param mixed $value value to insert
+     * @param int $key key for the inserted element
+     * @param bool $updateMode if true, existing element with equal key
+     * will be updated. If element not exists, it will be created.
+     * @return bool true if element added or updated, otherwise false
      */
     public function add($value, int $key, bool $updateMode = false): bool {
         $addNode = new Node($value, $key);
@@ -74,28 +75,36 @@ class Tree {
                 }
             }
         }
-        if (!$updateMode) {
-            $currentNode = $addNode;
-            $this->size++;
-            return true;
+        $currentNode = $addNode;
+        $this->size++;
+        return true;
+    }
+
+    /**
+     * @param mixed $value value to update
+     * @param int $key key for the updates element
+     * @return bool true if element exists and updated, otherwise false
+     */
+    public function update($value, int $key): bool {
+        $currentNode = $this->root;
+        while (isset($currentNode)) {
+            if ($key < $currentNode->getKey()) {
+                $currentNode = $currentNode->getLeft();
+            } else if ($key > $currentNode->getKey()) {
+                $currentNode = $currentNode->getRight();
+            } else if ($key == $currentNode->getKey()) {
+                $currentNode->setValue($value);
+                return true;
+            }
         }
         return false;
     }
 
     /**
-     * @param $value
-     * @param $key
-     * @return bool
+     * @param int $key the key to find the element
+     * @return mixed|null if element found, returns its value, null otherwise
      */
-    public function update($value, $key): bool {
-        return $this->add($value, $key, true);
-    }
-
-    /**
-     * @param $key
-     * @return mixed|null
-     */
-    public function get($key) {
+    public function get(int $key) {
         $currentNode = $this->root;
         while (isset($currentNode)) {
             if ($currentNode->getKey() == $key) {
@@ -112,24 +121,24 @@ class Tree {
     }
 
     /**
-     * @return array
+     * @return array indexed array of tree values
      */
     public function values(): array {
         return $this->recursiveValues($this->root);
     }
 
     /**
-     * @return Node|null
+     * @return Node|null root of the tree
      */
     public function getRoot(): ?Node {
         return $this->root;
     }
 
     /**
-     * @param $key
-     * @return bool
+     * @param int $key the key of the element to remove
+     * @return bool true if element exists and successfully removed, otherwise false
      */
-    public function remove($key): bool {
+    public function remove(int $key): bool {
         $currentNode = &$this->root;
         while (isset($currentNode)) {
             if ($currentNode->getKey() == $key) {
@@ -157,9 +166,10 @@ class Tree {
     }
 
     /**
-     * @param Node|null $node
-     * @param bool $recursive
-     * @param bool $updateMode
+     * @param Node|null $node node for the insertion
+     * @param bool $recursive if true, node every child will be added recursively
+     * @param bool $updateMode if true, existing element with equal key
+     * will be updated. If element not exists, it will be created.
      */
     public function addNode(?Node $node, bool $recursive = false, bool $updateMode = false) {
         if (!isset($this->root)) {
@@ -193,7 +203,7 @@ class Tree {
     /**
      * @param Node|null $node
      * @param bool $firstCall
-     * @return int
+     * @return int the number of elements with an parent node (include parent)
      */
     private function recursiveSize(?Node $node = null, bool $firstCall = true): int {
         static $size;
@@ -217,7 +227,7 @@ class Tree {
     /**
      * @param Node|null $node
      * @param bool $firstCall
-     * @return array
+     * @return array indexed array of values from parent node
      */
     private function recursiveValues(?Node $node, bool $firstCall = true): array {
         static $values;
