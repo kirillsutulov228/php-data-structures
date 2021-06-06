@@ -25,10 +25,23 @@ class LinkedList {
     private int $size;
 
 
-    public function __construct() {
+    /**
+     * LinkedList constructor.
+     * @param array|null $values array of the initial values (optional)
+     */
+    public function __construct(array $values = null) {
         $this->size = 0;
         $this->head = null;
         $this->tail = null;
+        if (isset($values)) {
+            $this->addFromArray($values);
+        }
+    }
+
+    public function addFromArray(array $values) {
+            foreach ($values as $value) {
+                $this->add($value);
+            }
     }
 
     /**
@@ -99,17 +112,20 @@ class LinkedList {
     }
 
     /**
-     * @return mixed|null
+     * @return mixed|null last element value if exists, null otherwise
      */
     public function getLast() {
-        if (!isset($this->tail)) {
+        if ($this->size == 0) {
             return null;
+        }
+        else if ($this->size == 1) {
+            return $this->head->getValue();
         }
         return $this->tail->getValue();
     }
 
     /**
-     * @return mixed|null
+     * @return mixed|null first element value if exists, null otherwise
      */
     public function getFirst() {
         if (!isset($this->head)) {
@@ -132,11 +148,80 @@ class LinkedList {
     }
 
     /**
-     * @return int
+     * @param mixed $value the value to be found in the list
+     * @return bool true if list contains the value, otherwise false
+     */
+    public function find($value): bool {
+        $currentNode = $this->head;
+        while (isset($currentNode)) {
+            if ($currentNode->getValue() === $value) {
+                return true;
+            }
+            $currentNode = $currentNode->getNext();
+        }
+        return false;
+    }
+
+    /**
+     * @param int $index the index of the element to remove
+     * @return bool true if the element successfully removed, false otherwise
+     */
+    public function removeByIndex(int $index): bool {
+        if ($index >= $this->size || $index < 0) return false;
+
+        if ($index == 0) {
+            if ($this->size == 1) {
+                $this->head = null;
+                $this->tail = null;
+            }
+            else if ($this->size == 2) {
+               $this->head = $this->tail;
+               $this->tail = null;
+               $this->head->setNext(null);
+               $this->head->setPrev(null);
+            }
+            else {
+                $this->head = $this->head->getNext();
+                $this->head->setPrev(null);
+            }
+        }
+
+        else if ($index == $this->size - 1) {
+            if ($this->size == 1) {
+                $this->tail = null;
+                $this->head = null;
+            }
+            else if ($this->size == 2) {
+                $this->tail = null;
+                $this->head->setNext(null);
+            }
+            else {
+                $this->tail=$this->tail->getPrev();
+                $this->tail->setNext(null);
+            }
+        }
+
+        else {
+            $removeNode = $this->head;
+            $currentPos = 0;
+            while ($currentPos < $index) {
+                $removeNode = $removeNode->getNext();
+                $currentPos++;
+            }
+            $prev = $removeNode->getPrev();
+            $next = $removeNode->getNext();
+            $prev->setNext($next);
+            $next->setPrev($prev);
+        }
+        $this->size--;
+        return true;
+    }
+
+    /**
+     * @return int current size of the list
      */
     public function getSize(): int {
         return $this->size;
     }
-
 
 }
