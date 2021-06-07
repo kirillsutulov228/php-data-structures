@@ -2,7 +2,8 @@
     "autoload": {
         "psr-4": {
             "Structures\\linked_list\\": "src/structures/linked_list",
-            "Structures\\tree\\": "src/structures/tree"
+            "Structures\\tree\\": "src/structures/tree",
+            "Structures\\hash_table\\": "src/structures/hash_table"
         }
     },
     "require-dev": {
